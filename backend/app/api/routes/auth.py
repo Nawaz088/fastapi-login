@@ -3,6 +3,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.core.security import verify_password, create_access_token
 from app.db.login_db import users_db
 from app.models.user import Token, UserInDB
+from app.api.deps import get_current_user
+
 
 router = APIRouter()
 
@@ -24,3 +26,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
     access_token = create_access_token(data={"sub": user["username"]})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/hello")
+async def hello(current_user=Depends(get_current_user)):
+    return {"message": f"Hello, {current_user.username}!"}

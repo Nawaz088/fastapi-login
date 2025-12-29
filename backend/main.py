@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends # type: ignore
 from app.api.routes import auth
-from app.api.deps import get_current_user
 from typing import Optional
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 app = FastAPI(title="FastAPI Login System")
 
@@ -22,6 +21,3 @@ app.add_middleware(
 
 app.include_router(auth.router)
 
-@app.get("/hello")
-async def hello(current_user=Depends(get_current_user)):
-    return {"message": f"Hello, {current_user.username}!"}
