@@ -27,6 +27,20 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = create_access_token(data={"sub": user["username"]})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/hello")
-async def hello(current_user=Depends(get_current_user)):
-    return {"message": f"Hello, {current_user.username}!"}
+# @router.get("/hello")
+# async def hello(current_user=Depends(get_current_user)):
+#     return {"message": f"Hello, {current_user.username}!"}
+
+@router.post("/signup", response_model=Token)
+def signup(form_data: OAuth2PasswordRequestForm = Depends()):
+    if form_data.username in users_db:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username already registered",
+        )
+    users_db[form_data.username] = {
+        "username": form_data.username,
+        "password": form_data.password  
+    }
+    access_token = create_access_token(data={"sub": form_data.username})
+    return {"access_token": access_token, "token_type": "bearer"}
