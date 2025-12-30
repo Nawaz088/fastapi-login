@@ -1,9 +1,9 @@
 import { Container, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 
-const HelloPage = () => {
-  const { username } = useParams()
 
+const HelloPage = () => {
+  const { username } = useParams();
 
 
   return (
